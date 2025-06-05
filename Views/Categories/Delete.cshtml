@@ -1,0 +1,58 @@
+﻿@model NorthWindMVC.Models.Category
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Category</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CategoryName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Picture)
+        </dt>
+        <dd class = "col-sm-10">
+            @if (Model.Picture != null && Model.Picture.Length > 0)
+            {
+                bool isStandardBmp = Model.Picture.Length > 2 && Model.Picture[0] == 0x42 && Model.Picture[1] == 0x4D;
+                if (isStandardBmp)
+                {
+                    var base64 = Convert.ToBase64String(Model.Picture);
+                    <img id="categoryPicture" src="data:image/bmp;base64,@base64" alt="Employee Photo" style="max-width:100px;max-height:100px;" />
+                }
+                else if (Model.Picture.Length > 78 && Model.Picture[78] == 0x42 && Model.Picture[79] == 0x4D)
+                {
+                    var imageBytes = Model.Picture.Skip(78).ToArray();
+                    var base64 = Convert.ToBase64String(imageBytes);
+                    <img id="categoryPicture" src="data:image/bmp;base64,@base64" alt="Employee Photo" style="max-width:100px;max-height:100px;" />
+                }
+                else
+                {
+                    <span>No valid BMP photo</span>
+                }
+            }
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="CategoryId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+    </form>
+</div>

@@ -1,0 +1,66 @@
+﻿@model IEnumerable<NorthWindMVC.Models.Category>
+
+@{
+    ViewData["Title"] = "Categories";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Categories</h1>
+
+<div class="float-end">
+    <a asp-action="Create">Create New</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CategoryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Picture)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategoryName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                    @if (item.Picture != null && item.Picture.Length > 0)
+                    {
+                        bool isStandardBmp = item.Picture.Length > 2 && item.Picture[0] == 0x42 && item.Picture[1] == 0x4D;
+                        if (isStandardBmp)
+                        {
+                            var base64 = Convert.ToBase64String(item.Picture);
+                            <img id="categoryPicture" src="data:image/bmp;base64,@base64" alt="Category Photo" style="max-width:100px;max-height:100px;" />
+                        }
+                        else if (item.Picture.Length > 78 && item.Picture[78] == 0x42 && item.Picture[79] == 0x4D)
+                        {
+                            var imageBytes = item.Picture.Skip(78).ToArray();
+                            var base64 = Convert.ToBase64String(imageBytes);
+                            <img id="categoryPicture" src="data:image/bmp;base64,@base64" alt="Category Photo" style="max-width:100px;max-height:100px;" />
+                        }
+                        else
+                        {
+                            <span>No valid BMP photo</span>
+                        }
+                    }
+                </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.CategoryId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.CategoryId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.CategoryId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

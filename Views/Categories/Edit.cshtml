@@ -1,0 +1,68 @@
+﻿@model NorthWindMVC.Models.Category
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>Category</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CategoryId" />
+            <div class="form-group">
+                <label asp-for="CategoryName" class="control-label"></label>
+                <input asp-for="CategoryName" class="form-control" />
+                <span asp-validation-for="CategoryName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Picture" class="control-label"></label>
+                @if (Model.Picture != null && Model.Picture.Length > 0)
+                {
+                    bool isStandardBmp = Model.Picture.Length > 2 && Model.Picture[0] == 0x42 && Model.Picture[1] == 0x4D;
+                    if (isStandardBmp)
+                    {
+                        var base64 = Convert.ToBase64String(Model.Picture);
+                        <img id="categoryPicture" src="data:image/bmp;base64,@base64" alt="Category Photo" style="max-width:100px;max-height:100px;" />
+                    }
+                    else if (Model.Picture.Length > 78 && Model.Picture[78] == 0x42 && Model.Picture[79] == 0x4D)
+                    {
+                        var imageBytes = Model.Picture.Skip(78).ToArray();
+                        var base64 = Convert.ToBase64String(imageBytes);
+                        <img id="categoryPicture" src="data:image/bmp;base64,@base64" alt="Category Photo" style="max-width:100px;max-height:100px;" />
+                    }
+                    else
+                    {
+                        <span>No valid BMP photo</span>
+                    }
+                }
+                <input type="file"
+                       accept=".png,.jpg,.jpeg,.gif,.tif"
+                       asp-for="Picture"
+                       class="form-control"
+                       style="border:0px!important;padding: 0px;padding-top: 10px;padding-bottom: 30px; width:200px;"
+                       onchange="document.getElementById('categoryPicture').src = window.URL.createObjectURL(this.files[0])" />
+                <span asp-validation-for="Picture" class="text-danger"></span>                <span asp-validation-for="Picture" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
