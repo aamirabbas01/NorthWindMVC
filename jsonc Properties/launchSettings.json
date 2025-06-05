@@ -1,0 +1,14 @@
+{
+  "profiles": {
+    "IIS Express": {
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    },
+    "YourProjectName": {
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+         }
+       }
+     }
+   }

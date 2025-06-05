@@ -15,6 +15,9 @@ public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
     }
 
+    public virtual DbSet<CustomerAndSuppliersByCity> CustomerAndSuppliersByCities { get; set; }
+
+    public virtual DbSet<ProductSalesFor1997> ProductSalesFor1997s { get; set; }
 
 
     public virtual DbSet<Category> Categories { get; set; }
@@ -52,7 +55,30 @@ public partial class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         base.OnModelCreating(modelBuilder); // <-- This is important for Identity
 
-        
+        modelBuilder.Entity<CustomerAndSuppliersByCity>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("Customer and Suppliers by City");
+
+            entity.Property(e => e.City).HasMaxLength(15);
+            entity.Property(e => e.CompanyName).HasMaxLength(40);
+            entity.Property(e => e.ContactName).HasMaxLength(30);
+            entity.Property(e => e.Relationship)
+                .HasMaxLength(9)
+                .IsUnicode(false);
+        });
+
+        modelBuilder.Entity<ProductSalesFor1997>(entity =>
+        {
+            entity
+                .HasNoKey()
+                .ToView("Product Sales for 1997");
+
+            entity.Property(e => e.CategoryName).HasMaxLength(15);
+            entity.Property(e => e.ProductName).HasMaxLength(40);
+            entity.Property(e => e.ProductSales).HasColumnType("money");
+        });
 
         modelBuilder.Entity<Category>(entity =>
         {

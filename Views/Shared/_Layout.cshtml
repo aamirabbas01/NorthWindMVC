@@ -74,9 +74,23 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="reportDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Reports
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="reportDropdown">
+                                    <li>
+                                        <a class="dropdown-item" asp-page="/Reports/ProductSales">Product Sales of 1997</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-page="/Reports/CustomerAndSupplier">Customer And Supplier By City</a>
+                                    </li>
+                                   
+                                </ul>
+                            </li>
                             @if (User.IsInRole(NorthWindMVC.Models.Data.Enums.Roles.SuperAdmin.ToString()))
                             {
-                                <li class="nav-item dropdown">
+                                <li class="nav-item dropdown ml-5">
                                     <a class="nav-link dropdown-toggle text-dark" href="#" id="RolesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Roles
                                     </a>
